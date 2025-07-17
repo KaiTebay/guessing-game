@@ -1,10 +1,21 @@
 // To obtain user input and print outputs, use the input/output library from the standard  library.
 use std::io;
 
+// To generate random numbers, use the Rng trait from the rand library.
+use rand::Rng;
+
 // Define the main function with no parameters and the following body:
 fn main() {
 	// Use the println! macro to print strings to introduce the game
 	println!("Guess the number!");
+
+	// Define a new variable called secret_number
+	// Bind secret_number to the output of the following:
+		// call rand::thread_rng to specify the random number generation—current thread, seeded by operating system.
+		// call rand::gen_range to generate a random number within the argument range. 
+	let secret_number = rand::thread_rng().gen_range(1..=100);
+
+	println!("The secret number is: {secret_number}");
 
 	println!("Please input your guess.");
 
