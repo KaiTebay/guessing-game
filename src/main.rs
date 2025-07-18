@@ -1,6 +1,6 @@
-// To obtain user input and print outputs, use the input/output library from the standard  library.
 // To order and handle guesses, use the Ordering type from std::cmp.
 use std::cmp::Ordering;
+// To obtain user input and print outputs, use the input/output library from the standard  library.
 use std::io;
 
 // To generate random numbers, use the Rng trait from the rand library.
@@ -19,47 +19,56 @@ fn main() {
 
 	println!("The secret number is: {secret_number}");
 
-	println!("Please input your guess.");
+	loop {
+		println!("Please input your guess.");
 
-	// Define a mutable (the value can change) variable called guess.
-	// Bind guess to 'new', an associated function of the String type from the standard library.
-	// i.e. 'guess' is a variable starting as an empty string.
-	let mut guess = String::new();
+		// Define a mutable (the value can change) variable called guess.
+		// Bind guess to 'new', an associated function of the String type from the standard library.
+		// i.e. 'guess' is a variable starting as an empty string.
+		let mut guess = String::new();
 	
-	// Call the stdin function from std:io.
-	io::stdin()
-		// Call the read_line method to take the user's standard input and append it to a string.
-		// By passing a mutable reference ('&mut') to guess as the argument, tell read_line which string to append to.
-		.read_line(&mut guess)
-		// In addition to the string value, the read_line method will return an enum Result about its success.
-		// Here, we should handle errors. In this case, the expect method will simply crash the program.
-		.expect("Failed to read line");
+		// Call the stdin function from std:io.
+		io::stdin()
+			// Call the read_line method to take the user's standard input and append it to a string.
+			// By passing a mutable reference ('&mut') to guess as the argument, tell read_line which string to append to.
+			.read_line(&mut guess)
+			// In addition to the string value, the read_line method will return an enum Result about its success.
+			// Here, we should handle errors. In this case, the expect method will simply crash the program.
+			.expect("Failed to read line");
 
-	// Define a new 'guess' variable which shadows the value of the original 'guess'.
-	// Annotate the new varaible's type as an unsigned, 32-bit integer.
-	// Use the trim method to eliminate whitespace from the string, since the u32 type can only contain numerical data.
-	// When the user inputs their guess, they must press the return key. This adds a '\n'—or '\r\n', on Windows—newline character which .trim removes.
-	// Since the parse method only works for characters which can be logically converted into a numerical value, it will fail for other characters and return a Result.
-	// Handle the error by crashing and printing to screen.
-	let guess: u32 = guess.trim().parse().expect("Please type a number!");
+		// Define a new 'guess' variable which shadows the value of the original 'guess'.
+		// Annotate the new varaible's type as an unsigned, 32-bit integer.
+		// Use the trim method to eliminate whitespace from the string, since the u32 type can only contain numerical data.
+		// When the user inputs their guess, they must press the return key. This adds a '\n'—or '\r\n', on Windows—newline character which .trim removes.
+		// Since the parse method only works for characters which can be logically converted into a numerical value, it will fail for other characters and return a Result.
+		// Handle the error by crashing and printing to screen.
+		let guess: u32 = guess.trim().parse().expect("Please type a number!");
 
-	// Use the println! macro to print the user's guess.
-	// This println! uses curly brackets and the variable name 'guess' as a placeholder for the variable's value.
-	println!("You guessed: {guess}");
+		// Use the println! macro to print the user's guess.
+		// This println! uses curly brackets and the variable name 'guess' as a placeholder for the variable's value.
+		println!("You guessed: {guess}");
 
 
-	// Use the match expression to decide what to do next.
-	// Call the cmp method to compare the value of guess with the value of secret_number.
-	// Since guess is a u32 variable, Rust will infer that secret_number is also u32—since it's already numerical.
-	// The output is expressed using the Ordering enum—Less, Greater, or Equal.
-	// match will use the output as its pattern.
-	// match will look at each 'arm's' pattern until it finds a match.
-	// Once it finds a match, the match expression will execute the subsequent code.
-	match guess.cmp(&secret_number) {
-		// This is an arm.
-		Ordering::Less => println!("Too small!"),
-		// This is another arm.
-		Ordering::Greater => println!("Too big!"),
-		Ordering::Equal => println!("You win!"),
+		// Use the match expression to decide what to do next.
+		// Call the cmp method to compare the value of guess with the value of secret_number.
+		// Since guess is a u32 variable, Rust will infer that secret_number is also u32—since it's already numerical.
+		// The output is expressed using the Ordering enum—Less, Greater, or Equal.
+		// match will use the output as its pattern.
+		// match will look at each 'arm's' pattern until it finds a match.
+		// Once it finds a match, the match expression will execute the subsequent code.
+		match guess.cmp(&secret_number) {
+			// This is an arm.
+			Ordering::Less => println!("Too small!"),
+			// This is another arm.
+			Ordering::Greater => println!("Too big!"),
+			Ordering::Equal => {
+				println!("You win!");
+				// Adding a break here exits the loop.
+				// The break will only be reached once the match expression executes this code because it reached an Equal output of the comparison.
+				// Therefore, the user will remain in the game until they win.
+				// Exiting the loop here will also exit the program because this is the last part of main.
+				break;
+			}
+		}
 	}
 }
