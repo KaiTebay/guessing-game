@@ -17,7 +17,8 @@ fn main() {
 		// call rand::gen_range to generate a random number within the argument range. 
 	let secret_number = rand::thread_rng().gen_range(1..=100);
 
-	println!("The secret number is: {secret_number}");
+	// Commented for testing
+	// println!("The secret number is: {secret_number}");
 
 	loop {
 		println!("Please input your guess.");
@@ -41,8 +42,11 @@ fn main() {
 		// Use the trim method to eliminate whitespace from the string, since the u32 type can only contain numerical data.
 		// When the user inputs their guess, they must press the return key. This adds a '\n'—or '\r\n', on Windows—newline character which .trim removes.
 		// Since the parse method only works for characters which can be logically converted into a numerical value, it will fail for other characters and return a Result.
-		// Handle the error by crashing and printing to screen.
-		let guess: u32 = guess.trim().parse().expect("Please type a number!");
+		// Handle the Result using match: if it successfully outputs a number, return the number; if it ouputs an error, catch all and loop again.
+		let guess: u32 = match guess.trim().parse() {
+			Ok(num) => num,
+			Err(_) => continue,
+		};
 
 		// Use the println! macro to print the user's guess.
 		// This println! uses curly brackets and the variable name 'guess' as a placeholder for the variable's value.
